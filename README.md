@@ -17,6 +17,7 @@ Cloudbreak [product documentation](http://sequenceiq.com/cloudbreak/).
 
 Cloudbreak [API documentation](http://docs.cloudbreak.apiary.io/).
 
+
 ## Cloudbreak Docker container 
 
 We are trying to ease your way to start Cloudbreak and launch on-demand Hadoop clusters in the cloud. The easiest way to start with Cloudbreak is by starting it in  this Docker container. We have put together a fully configured and working Docker container - you will just have to set a few environment variables and you are ready to go.
