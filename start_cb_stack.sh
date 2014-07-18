@@ -1,5 +1,4 @@
 #!/bin/bash -e
-set +x
 
 # Start a postgres database docker container
 docker run -d --name="postgresql" -p 5432:5432 -v /tmp/data:/data \
@@ -10,6 +9,7 @@ docker run -d --name="postgresql" -p 5432:5432 -v /tmp/data:/data \
 
 timeout=10
 echo "Wait $timeout seconds for the POSTGRES DB to start up"
+sleep $timeout
 
 # Start the CLoudbreak application docker container
 docker rm -f "cloudbreak" || true
@@ -32,24 +32,14 @@ docker run -d --name="cloudbreak" -v /tmp/logs:/logs \
 -p 8889:8080 \
 sequenceiq/cloudbreak bash
 
-url="$CB_HOST_ADDR/health"
+timeout=60
+echo "Wait $timeout seconds for the CLOUDBREAK APP to start up"
+sleep $timeout
 
-maxAttempts=10
-pollTimeout=10
-
-for (( i=1; i<=$maxAttempts; i++ ))
-do
-    echo "GET $url. Attempt #$i"
-    code=`curl -skL -w "%{http_code}\\n" "$url" -o /dev/null`
-    echo "Found code $code"
-    if [ "x$code" = "x200" ]
-    then
-         echo "SequenceIQ Provisioning API is available. Logs are available at $logUrl"
-         break
-    elif [ $i -eq $maxAttempts ]
-    then
-         echo "SequenceIQ Provisioning API not started in time."
-         exit 1
-    fi
-    sleep $pollTimeout
-done
+echo Starting the CLI container ...
+docker run -it --rm --name="cloudbreak-shell"
+-e CB_USER="cbuser@sequenceiq.com" \
+-e CB_PASS="test123" \
+--link cloudbreak:cb \
+--entrypoint /bin/bash \
+sequenceiq/cloudbreak -c 'sh /start_cb_shell.sh'
