@@ -8,7 +8,7 @@ ADD https://s3-eu-west-1.amazonaws.com/seq-repo/releases/com/sequenceiq/cloudbre
 ADD https://s3-eu-west-1.amazonaws.com/maven.sequenceiq.com/snapshots/com/sequenceiq/cloudbreak/cloudbreak-shell/0.1-SNAPSHOT/cloudbreak-shell-0.1-20140718.135423-36.jar /cloudbreak-shell.jar
 
 # Install starter script for the cloudbreak shell application
-ADD start_cb_shell.sh /
+ADD add/start_cb_shell.sh /
 
 WORKDIR /tmp
 ENTRYPOINT ["java", "-jar", "/cloudbreak.jar"]
