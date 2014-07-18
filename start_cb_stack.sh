@@ -1,5 +1,8 @@
 #!/bin/bash -e
 
+# check the environment
+. set_env.sh
+
 # Start a postgres database docker container
 docker run -d --name="postgresql" -p 5432:5432 -v /tmp/data:/data \
   -e "USER=$CB_DB_ENV_USER" \
@@ -38,8 +41,8 @@ sleep $timeout
 
 echo Starting the CLI container ...
 docker run -it --rm --name="cloudbreak-shell" \
--e CB_USER="cbuser@sequenceiq.com" \
--e CB_PASS="test123" \
+-e CB_USER="$CB_USER" \
+-e CB_PASS="$CB_PASS" \
 --link cloudbreak:cb \
 --entrypoint /bin/bash \
 sequenceiq/cloudbreak -c 'sh /start_cb_shell.sh'
