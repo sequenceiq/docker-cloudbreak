@@ -37,7 +37,7 @@ echo "Wait $timeout seconds for the CLOUDBREAK APP to start up"
 sleep $timeout
 
 echo Starting the CLI container ...
-docker run -it --rm --name="cloudbreak-shell"
+docker run -it --rm --name="cloudbreak-shell" \
 -e CB_USER="cbuser@sequenceiq.com" \
 -e CB_PASS="test123" \
 --link cloudbreak:cb \
