@@ -35,14 +35,22 @@ docker run -d --name="cloudbreak" -v /tmp/logs:/logs \
 -p 8889:8080 \
 sequenceiq/cloudbreak bash
 
-timeout=60
-echo "Wait $timeout seconds for the CLOUDBREAK APP to start up"
+maxAttempts=10
+pollTimeout=10
+BACKEND_IP=$(docker inspect --format="{{.NetworkSettings.IPAddress}}" $(docker ps -ql))
+echo Backend ip: $BACKEND_IP
+
+url=${BACKEND_IP}:8080${CB_MANAGEMENT_CONTEXT_PATH}health
+echo URL: $url
+
+timeout=120
+echo "Wait $timeout seconds for the POSTGRES DB to start up"
 sleep $timeout
 
-echo Starting the CLI container ...
-docker run -it --rm --name="cloudbreak-shell" \
--e CB_USER="$CB_USER" \
--e CB_PASS="$CB_PASS" \
---link cloudbreak:cb \
---entrypoint /bin/bash \
-sequenceiq/cloudbreak -c 'sh /start_cb_shell.sh'
+# register the user
+echo Registering the user: $CB_USER
+curl -sX POST -H "Content-Type: application/json" http://$BACKEND_IP:8080/users \
+  --data "{\"email\": \""$CB_USER"\", \"password\": \""$CB_PASS"\",  \"firstName\": \"seq\", \"lastName\": \"pwd\", \"company\": \"SequenceIQ\" }" | jq '.'
+
+
+echo "Please check your email and confirm your registation."
