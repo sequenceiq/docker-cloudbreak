@@ -1,5 +1,7 @@
 #!/bin/bash -e
 
+echo "Setting up cloudbreak infrastructure ..."
+
 # check the environment
 . set_env.sh
 
@@ -26,7 +28,6 @@ docker run -d --name="cloudbreak" -v /tmp/logs:/logs \
 -e "CB_SMTP_SENDER_HOST=$CB_SMTP_SENDER_HOST" \
 -e "CB_SMTP_SENDER_PORT=$CB_SMTP_SENDER_PORT" \
 -e "CB_SMTP_SENDER_FROM=$CB_SMTP_SENDER_FROM" \
--e "CB_HOST_ADDR=$CB_HOST_ADDR" \
 -e "CB_AZURE_IMAGE_URI=$CB_AZURE_IMAGE_URI" \
 -e "CB_BLUEPRINT_DEFAULTS=$CB_BLUEPRINT_DEFAULTS" \
 -e "CB_SNS_SSL=false" \
@@ -43,12 +44,12 @@ echo Backend ip: $BACKEND_IP
 url=${BACKEND_IP}:8080${CB_MANAGEMENT_CONTEXT_PATH}health
 echo URL: $url
 
-timeout=120
-echo "Wait $timeout seconds for the POSTGRES DB to start up"
+timeout=60
+echo "Wait $timeout seconds for the CLOUDBREAK APP to start up"
 sleep $timeout
 
 # register the user
-echo Registering the user: $CB_USER
+echo "Registering the user: $CB_USER"
 curl -sX POST -H "Content-Type: application/json" http://$BACKEND_IP:8080/users \
   --data "{\"email\": \""$CB_USER"\", \"password\": \""$CB_PASS"\",  \"firstName\": \"seq\", \"lastName\": \"pwd\", \"company\": \"SequenceIQ\" }" | jq '.'
 
