@@ -36,7 +36,7 @@ docker pull sequenceiq/cloudbreak:0.1
 
 ### Start a container
 
-In order to use the Docker image you have just build or pulled use:
+In order to use the Docker container you have just built or pulled use:
 
 ```
 docker run -i -t sequenceiq/cloudbreak:0.1
