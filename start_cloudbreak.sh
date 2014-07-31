@@ -40,11 +40,11 @@ sequenceiq/cloudbreak bash
 BACKEND_IP=$(docker inspect --format="{{.NetworkSettings.IPAddress}}" $(docker ps -ql))
 echo Backend ip: $BACKEND_IP
 
-timeout=60
+timeout=120
 echo "Wait $timeout seconds for the CLOUDBREAK APP to start up"
 sleep $timeout
 
-status = $(curl -L "http://$url")
+status=$(curl -L "http://$BACKEND_IP:8080/health")
 echo "Backend status: $status"
 
 # register the user
