@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 
 echo "Setting up cloudbreak infrastructure ..."
 
@@ -55,12 +55,27 @@ sequenceiq/cloudbreak bash
 BACKEND_IP=$(docker inspect --format="{{.NetworkSettings.IPAddress}}" $(docker ps -ql))
 echo Backend ip: $BACKEND_IP
 
-timeout=120
-echo "Wait $timeout seconds for the CLOUDBREAK APP to start up"
-sleep $timeout
 
-status=$(curl -L "http://$BACKEND_IP:8080/health")
-echo "Backend status: $status"
+url="http://$BACKEND_IP:8080/health"
+maxAttempts=10
+pollTimeout=30
+
+for (( i=1; i<=$maxAttempts; i++ ))
+do
+    echo "GET $url. Attempt #$i"
+    code=`curl -sL -w "%{http_code}\\n" "$url" -o /dev/null`
+    echo "Found code $code"
+    if [ "x$code" = "x200" ]
+    then
+         echo "SequenceIQ Cloudbreak is available!"
+         break
+    elif [ $i -eq $maxAttempts ]
+    then
+         echo "SequenceIQ Cloudbreak not started in time."
+         exit 1
+    fi
+    sleep $pollTimeout
+done
 
 # register the user
 echo "Registering the user: $CB_USER"
