@@ -1,9 +1,9 @@
-#!/bin/bash
+#!/bin/bash -e
 
 echo "Setting up cloudbreak infrastructure ..."
 
 # check the environment
-./env_props.sh
+source env_props.sh
 ./check_env.sh
 
 #while [ $? -eq 1 ]
@@ -14,9 +14,10 @@ echo "Setting up cloudbreak infrastructure ..."
 #  ./set_env.sh
 #done
 
-if [ $? > 0 ];
+
+if [ $? -ne 0 ];
   then
-  exit 1; 
+  exit 1;
 fi
 
 # Start a postgres database docker container
