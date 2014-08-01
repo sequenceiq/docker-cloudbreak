@@ -1,9 +1,17 @@
-#!/bin/bash -e
+#!/bin/bash
 
 echo "Setting up cloudbreak infrastructure ..."
 
 # check the environment
-. set_env.sh
+./set_env.sh
+
+while [ $? -eq 1 ]
+do
+  read value
+  echo "export $value"
+  export "$value"
+  ./set_env.sh
+done
 
 # Start a postgres database docker container
 docker run -d --name="postgresql" -p 5432:5432 -v /tmp/data:/data \
