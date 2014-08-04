@@ -6,6 +6,7 @@
 : ${CB_DB_ENV_USER:?"Please set the database user. Check the following entry in the env_props.sh file:CB_DB_ENV_USER="}
 : ${CB_DB_ENV_PASS:?"Please set the database password. Check the following entry in the env_props.sh file:CB_DB_ENV_PASS="}
 : ${CB_HBM2DDL_STRATEGY:="create"}
+: ${CB_DB_ENV_DB:="cloudbreak"}
 
 # SMTP properties
 : ${CB_SMTP_SENDER_USERNAME:?"Please add the SMTP username. Check the following entry in the env_props.sh file:CB_SMTP_SENDER_USERNAME="}

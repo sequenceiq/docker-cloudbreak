@@ -20,8 +20,10 @@ if [ $? -ne 0 ];
   exit 1;
 fi
 
+docker rm -f "postgresql" || true
+
 # Start a postgres database docker container
-docker run -d --name="postgresql" -p 5432:5432 -v /tmp/data:/data \
+docker run -d --name="postgresql" -p 5432:5432 \
   -e "USER=$CB_DB_ENV_USER" \
   -e "DB=$CB_DB_ENV_DB" \
   -e "PASS=$CB_DB_ENV_PASS"  \
