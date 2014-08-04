@@ -9,6 +9,9 @@ export CB_DB_ENV_PASS=
 # The desired hibernate configuration
 export CB_HBM2DDL_STRATEGY="create"
 
+#database name
+export CB_DB_ENV_DB="cloudbreak"
+
 # SMTP settings
 # The username to the used SMTP server
 export CB_SMTP_SENDER_USERNAME=
