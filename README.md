@@ -34,10 +34,17 @@ The image is also released as an official Docker image from Docker's automated b
 docker pull sequenceiq/cloudbreak:0.1
 ```
 
-### Start a container
+### Start the cloudbreak Application
 
-In order to use the Docker container you have just built or pulled use:
+To have a running cloudbreak instance on your machine (made up of docker containers hosting a postgres database, the cloudbreak application and a cloudbreak shell respectively), you can run the script:
 
 ```
-docker run -i -t sequenceiq/cloudbreak:0.1
+./start_cloudbreak.sh
+```
+
+This will drive you through setting up the required environment variables and starts the configured cloudbreak application. It also registers a user based on the information provided. At this point you'll havea fully functional CLoudbreak instance running on your host machine; you can start using it by accessing its  REST interface.
+However after the registration confirmation you can start a cloudbreak shell in a docker container by running the script:
+
+```
+start_cli.sh
 ```
