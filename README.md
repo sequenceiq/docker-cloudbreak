@@ -46,5 +46,5 @@ This will drive you through setting up the required environment variables and st
 However after the registration confirmation you can start a cloudbreak shell in a docker container by running the script:
 
 ```
-start_cli.sh
+./start_cli.sh
 ```
