@@ -1,14 +1,23 @@
 #!/bin/bash
 
+# Azure
+export CB_AZURE_IMAGE_URI="http://vmdepoteastus.blob.core.windows.net/linux-community-store/community-62091-a59dcdc1-d82d-4e76-9094-27b8c018a4a1-1.vhd"
+
+export CB_MANAGEMENT_CONTEXT_PATH="/"
+
+export CB_BLUEPRINT_DEFAULTS="lambda-architecture,multi-node-hdfs-yarn,single-node-hdfs-yarn"
+
+export CB_SNS_SSL="false"
+
+export CB_DB_ENV_DB="cloudbreak"
+
+export CB_HBM2DDL_STRATEGY="create"
+
 # The desired database user name
 export CB_DB_ENV_USER=
 
 # The database password
 export CB_DB_ENV_PASS=
-
-export CB_DB_ENV_DB="cloudbreak"
-
-export CB_HBM2DDL_STRATEGY="create"
 
 # SMTP settings
 # The username to the used SMTP server
@@ -36,5 +45,3 @@ export CB_USER=
 
 # The password to access the cloudbreak
 export CB_PASS=
-
-export CB_SNS_SSL=

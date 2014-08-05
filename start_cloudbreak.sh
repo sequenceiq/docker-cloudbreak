@@ -6,15 +6,6 @@ echo "Setting up cloudbreak infrastructure ..."
 source env_props.sh
 ./check_env.sh
 
-#while [ $? -eq 1 ]
-#do
-#  read value
-#  echo "export $value"
-#  export "$value"
-#  ./set_env.sh
-#done
-
-
 if [ $? -ne 0 ];
   then
   exit 1;
