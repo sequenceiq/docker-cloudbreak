@@ -1,7 +1,6 @@
 #!/bin/bash -e
 # Cloudbreak User information
-: ${CB_USER:?"Please set the \$CB_USER environment variable! export CB_USER="}
-: ${CB_PASS:?"Please set the \$CB_PASS environment variable! export CB_PASS="}
+source env_props.sh
 
 for p in "${!CB_@}"; do
   echo $p=${!p}
