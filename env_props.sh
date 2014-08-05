@@ -11,7 +11,7 @@ export CB_SNS_SSL="false"
 
 export CB_DB_ENV_DB="cloudbreak"
 
-export CB_HBM2DDL_STRATEGY="create"
+export CB_HBM2DDL_STRATEGY="update"
 
 # The desired database user name
 export CB_DB_ENV_USER=

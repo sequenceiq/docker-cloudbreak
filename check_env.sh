@@ -5,6 +5,7 @@
 # database settings
 : ${CB_DB_ENV_USER:?"Please set the database user. Check the following entry in the env_props.sh file: CB_DB_ENV_USER="}
 : ${CB_DB_ENV_PASS:?"Please set the database password. Check the following entry in the env_props.sh file: CB_DB_ENV_PASS="}
+# default db properties
 : ${CB_HBM2DDL_STRATEGY:="update"}
 : ${CB_DB_ENV_DB:="cloudbreak"}
 
