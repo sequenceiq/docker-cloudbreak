@@ -23,7 +23,8 @@ fi
 docker rm -f "postgresql" || true
 
 # Start a postgres database docker container
-docker run -d --name="postgresql" -p 5432:5432 \
+docker run -d --name="postgresql" \
+  -p 5432:5432 \
   -e "USER=$CB_DB_ENV_USER" \
   -e "DB=$CB_DB_ENV_DB" \
   -e "PASS=$CB_DB_ENV_PASS"  \
@@ -36,7 +37,7 @@ sleep $timeout
 # Start the CLoudbreak application docker container
 docker rm -f "cloudbreak" || true
 
-docker run -d --name="cloudbreak" -v /tmp/logs:/logs \
+docker run -d --name="cloudbreak" \
 -e "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" \
 -e "AWS_SECRET_KEY=$AWS_SECRET_KEY" \
 -e "CB_HBM2DDL_STRATEGY=create" \
@@ -47,8 +48,8 @@ docker run -d --name="cloudbreak" -v /tmp/logs:/logs \
 -e "CB_SMTP_SENDER_FROM=$CB_SMTP_SENDER_FROM" \
 -e "CB_AZURE_IMAGE_URI=$CB_AZURE_IMAGE_URI" \
 -e "CB_BLUEPRINT_DEFAULTS=$CB_BLUEPRINT_DEFAULTS" \
--e "CB_SNS_SSL=false" \
--e "CB_MANAGEMENT_CONTEXT_PATH=/" \
+-e "CB_SNS_SSL=$CB_SNS_SSL" \
+-e "CB_MANAGEMENT_CONTEXT_PATH=$CB_MANAGEMENT_CONTEXT_PATH" \
 --link postgresql:cb_db \
 -p 8080:8080 \
 sequenceiq/cloudbreak bash
