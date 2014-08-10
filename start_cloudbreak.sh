@@ -75,6 +75,6 @@ done
 echo "Registering the user: $CB_USER"
 
 curl -sX POST -H "Content-Type: application/json" "http://${BACKEND_IP}:8080/users" \
-  --data "{\"email\": \""$CB_USER"\", \"password\": \""$CB_PASS"\",  \"firstName\": \"seq\", \"lastName\": \"pwd\", \"company\": \"Testing ltd\", \"userType\":\"DEFAULT\" }" | jq '.'
+  --data "{\"email\": \""$CB_USER"\", \"password\": \""$CB_PASS"\",  \"firstName\": \"seq\", \"lastName\": \"pwd\", \"company\": \"Testing ltd\" }" | jq '.'
 
 echo "Please check your emails and confirm your registation."
