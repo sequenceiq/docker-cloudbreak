@@ -27,7 +27,7 @@ If you'd like to try directly from the Dockerfile you can build the image as:
 docker build  -t sequenceiq/cloudbreak .
 ```
 
-### Start the cloudbreak Application
+### Start Cloudbreak API
 
 To have a running cloudbreak instance on your machine (made up of docker containers hosting a postgres database, the cloudbreak application and a cloudbreak shell respectively), you can run the script:
 
@@ -35,14 +35,20 @@ To have a running cloudbreak instance on your machine (made up of docker contain
 ./start_cloudbreak.sh
 ```
 
-This will drive you through setting up the required environment variables and starts the configured cloudbreak application. It also registers a user based on the information provided. At this point you'll havea fully functional CLoudbreak instance running on your host machine; you can start using it by accessing its  REST interface.
-However after the registration confirmation you can start a cloudbreak shell in a docker container by running the script:
+This will drive you through setting up the required environment variables and starts the configured Cloudbreak application. It also registers a user based on the information provided. At this point you'll havea fully functional CLoudbreak instance running on your host machine; you can start using it by accessing its  REST interface.
+
+
+### Using Cloudbreak CLI
+
+After the registration confirmation you can start a Cloudbreak shell in a docker container by running the script:
 
 ```
 ./start_cli.sh
 ```
 
-If you'd like to use the cloudbreak UI instead of the CLI, you'll need to start the application from your host machine (localhost).
+### Using Cloudbreak CLI
+
+If you'd like to use the Cloudbreak UI instead of the CLI, you'll need to start the UI application from your host machine (localhost).
 Please note that the UI app can only be run from the (local)host machine!
 
 To run UI app from localhost:
