@@ -46,13 +46,18 @@ After the registration confirmation you can start a Cloudbreak shell in a docker
 ./start_cli.sh
 ```
 
-### Using Cloudbreak CLI
+### Using Cloudbreak UI 
 
-If you'd like to use the Cloudbreak UI instead of the CLI, you'll need to start the UI application from your host machine (localhost).
-Please note that the UI app can only be run from the (local)host machine!
+TBD - Dusing Docker
 
-To run UI app from localhost:
+### Using Cloudbreak UI - on the host
+
+If you'd like to use the Cloudbreak UI instead of the CLI, you'll need to start the UI application on your host machine (localhost).
+
+To run the UI app from localhost:
 
 * install nginx
 * clone the UI project (git clone git@github.com:sequenceiq/uluwatu.git) into the appropriate folder of the nginx (or configure the nginx to use the folder which you cloned the project into)
-* set the ip address of the backend to the *connection.properties*
+* set the ip address of the backend for the `connection.properties` property
+
+
