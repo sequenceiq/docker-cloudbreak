@@ -48,7 +48,7 @@ After the registration confirmation you can start a Cloudbreak shell in a docker
 
 ### Using Cloudbreak UI 
 
-TBD - Dusing Docker
+TBD 
 
 ### Using Cloudbreak UI - on the host
 
