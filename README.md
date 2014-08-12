@@ -26,13 +26,6 @@ If you'd like to try directly from the Dockerfile you can build the image as:
 ```
 docker build  -t sequenceiq/cloudbreak .
 ```
-### Pull the image
-
-The image is also released as an official Docker image from Docker's automated build repository - you can always pull or refer the image when launching containers.
-
-```
-docker pull sequenceiq/cloudbreak:0.1
-```
 
 ### Start the cloudbreak Application
 
@@ -48,3 +41,12 @@ However after the registration confirmation you can start a cloudbreak shell in 
 ```
 ./start_cli.sh
 ```
+
+If you'd like to use the cloudbreak UI instead of the CLI, you'll need to start the application from your host machine (localhost).
+Please note that the UI app can only be run from the (local)host machine!
+
+To run UI app from localhost:
+
+* install nginx
+* clone the UI project (git clone git@github.com:sequenceiq/uluwatu.git) into the appropriate folder of the nginx (or configure the nginx to use the folder which you cloned the project into)
+* set the ip address of the backend to the *connection.properties*

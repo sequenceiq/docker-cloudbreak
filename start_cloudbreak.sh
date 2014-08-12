@@ -41,6 +41,7 @@ docker run -d --name="cloudbreak" \
 -e "CB_BLUEPRINT_DEFAULTS=$CB_BLUEPRINT_DEFAULTS" \
 -e "CB_SNS_SSL=$CB_SNS_SSL" \
 -e "CB_MANAGEMENT_CONTEXT_PATH=$CB_MANAGEMENT_CONTEXT_PATH" \
+-e "CB_UI_ADDR=$CB_UI_ADDR" \
 --link postgresql:cb_db \
 -p 8080:8080 \
 sequenceiq/cloudbreak bash
