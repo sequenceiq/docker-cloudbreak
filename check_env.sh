@@ -8,6 +8,7 @@
 # default db properties
 : ${CB_HBM2DDL_STRATEGY:="update"}
 : ${CB_DB_ENV_DB:="cloudbreak"}
+: ${CB_UI_ADDR:="http://localhost:8081"}
 
 # SMTP properties
 : ${CB_SMTP_SENDER_USERNAME:?"Please add the SMTP username. Check the following entry in the env_props.sh file: CB_SMTP_SENDER_USERNAME="}

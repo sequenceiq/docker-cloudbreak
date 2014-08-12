@@ -13,6 +13,8 @@ export CB_DB_ENV_DB="cloudbreak"
 
 export CB_HBM2DDL_STRATEGY="update"
 
+export CB_UI_ADDR="http://localhost:8081"
+
 # The desired database user name
 export CB_DB_ENV_USER=
 
