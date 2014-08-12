@@ -57,7 +57,7 @@ If you'd like to use the Cloudbreak UI instead of the CLI, you'll need to start 
 To run the UI app from localhost:
 
 * install nginx
-* clone the UI project (git clone git@github.com:sequenceiq/uluwatu.git) into the appropriate folder of the nginx (or configure the nginx to use the folder which you cloned the project into)
+* clone the UI project `git clone git@github.com:sequenceiq/uluwatu.git` into the appropriate folder of the nginx (or configure the nginx to use the folder which you cloned the project into)
 * set the ip address of the backend for the `connection.properties` property
 
 
