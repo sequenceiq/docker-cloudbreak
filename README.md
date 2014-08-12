@@ -58,6 +58,6 @@ To run the UI app from localhost:
 
 * install nginx
 * clone the UI project `git clone git@github.com:sequenceiq/uluwatu.git` into the appropriate folder of the nginx (or configure the nginx to use the folder which you cloned the project into)
-* set the ip address of the backend for the `connection.properties` property
+* set the IP address of the backend for the `connection.properties` property. In order to learn the IP address use: `docker ps -a` to get the running containers (you should see two containers running with the name _sequenceiq/cloudbreak:latest_ and _paintedfox/postgresql:latest_) then use `docker inspect --format="{{.NetworkSettings.IPAddress}}" CONTAINER ID` to return the IP address. `CONTAINER ID` is listed right beside the image name (sequenceiq/cloudbreak:latest).
 
 
