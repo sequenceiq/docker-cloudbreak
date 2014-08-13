@@ -6,11 +6,10 @@ for p in "${!CB_@}"; do
   echo $p=${!p}
 done
 
-
 echo Starting the CLI container ...
 docker run -it --rm --name="cloudbreak-shell" \
--e CB_USER="$CB_USER" \
--e CB_PASS="$CB_PASS" \
+-e CB_USER="$CB_DEFAULT_USER_EMAIL" \
+-e CB_PASS="$CB_DEFAULT_USER_PASSWORD" \
 -v /tmp:/tmp \
 --link cloudbreak:cb \
 --entrypoint /bin/bash \

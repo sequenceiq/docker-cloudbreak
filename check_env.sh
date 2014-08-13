@@ -31,10 +31,6 @@
 # AWS SNS subscriptions should use HTTPS endpoints or not
 : ${CB_SNS_SSL:="false"}
 
-# Cloudbreak User information
-: ${CB_USER:?"Please add the desired Cloudbreak username (email). Check the following entry in the env_props.sh file: CB_USER="}
-: ${CB_PASS:?"Please add the desired Cloudbreak password. Check the following entry in the env_props.sh file:  CB_PASS="}
-
 echo Starting cloudbreak with the following settings:
 
 for p in "${!CB_@}"; do

@@ -9,6 +9,7 @@ ADD https://s3-eu-west-1.amazonaws.com/maven.sequenceiq.com/snapshots/com/sequen
 
 # Install starter script for the Cloudbreak application
 ADD add/start_cloudbreak_app.sh /
+ADD add/wait_for_cloudbreak_api.sh /
 
 # Install starter script for the cloudbreak shell application
 ADD add/start_cloudbreak_shell_app.sh /

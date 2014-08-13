@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# SMTP settings
+# The username to the used SMTP server
+export CB_SMTP_SENDER_USERNAME=
+
+# The password to the used SMTP server
+export CB_SMTP_SENDER_PASSWORD=
+
+# THe SMTP server host
+export CB_SMTP_SENDER_HOST=
+
+# THe SMTP server port
+export CB_SMTP_SENDER_PORT=
+
+# The value of the from field in emails sent by the system (registration, password reset ...)
+export CB_SMTP_SENDER_FROM=
+
+# AWS related (optional) settings - not setting them causes AWS related operations to fail
+export AWS_ACCESS_KEY_ID=
+export AWS_SECRET_KEY=
+
+# Admin/Deployer user will be automatically registered and ready to log in to cloudbreak
+export CB_DEFAULT_USER_EMAIL=
+export CB_DEFAULT_USER_PASSWORD=
+export CB_DEFAULT_USER_FIRSTNAME=
+export CB_DEFAULT_USER_LASTNAME=
+export CB_DEFAULT_COMPANY_NAME=

@@ -2,16 +2,42 @@
 
 echo "Setting up cloudbreak infrastructure ..."
 
+if [ ! -f env_props.sh ] ;then
+  cp env_props.sh.sample env_props.sh
+  cat <<EOF
+=================================================
+= Please fill missing variables in:env_props.sh =
+=================================================
+EOF
+  exit
+fi
 # check the environment
 source env_props.sh
-./check_env.sh
+
+: ${CB_AZURE_IMAGE_URI:="http://vmdepoteastus.blob.core.windows.net/linux-community-store/community-62091-a59dcdc1-d82d-4e76-9094-27b8c018a4a1-5.vhd"}
+: ${CB_MANAGEMENT_CONTEXT_PATH:="/"}
+: ${CB_BLUEPRINT_DEFAULTS:="lambda-architecture,multi-node-hdfs-yarn,single-node-hdfs-yarn"}
+: ${CB_SNS_SSL:="false"}
+: ${CB_DB_ENV_DB:="cloudbreak"}
+: ${CB_HBM2DDL_STRATEGY:="update"}
+: ${CB_API_HOST:=cloudbreak.kom}
+: ${CB_API_PORT:=8080}
+: ${CB_UI_PORT:=80}
+: ${CB_API_URL:="http://$CB_API_HOST:$CB_API_PORT"}
+: ${CB_UI_ADDR:="http://$CB_API_HOST"}
+: ${CB_DB_ENV_USER:=cloudbreak}
+: ${CB_DB_ENV_PASS:=cloudbreak}
+
+: ${DOCKER_IMAGE_TAG:=0.1-hotfix}
+
+source check_env.sh
 
 if [ $? -ne 0 ];
   then
   exit 1;
 fi
 
-docker rm -f "postgresql" || true
+docker inspect postgresql &>/dev/null && docker rm -f postgresql
 
 # Start a postgres database docker container
 docker run -d --name="postgresql" \
@@ -26,7 +52,7 @@ echo "Wait $timeout seconds for the POSTGRES DB to start up"
 sleep $timeout
 
 # Start the CLoudbreak application docker container
-docker rm -f "cloudbreak" || true
+docker inspect cloudbreak &>/dev/null &&  docker rm -f cloudbreak
 
 docker run -d --name="cloudbreak" \
 -e "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" \
@@ -42,40 +68,47 @@ docker run -d --name="cloudbreak" \
 -e "CB_SNS_SSL=$CB_SNS_SSL" \
 -e "CB_MANAGEMENT_CONTEXT_PATH=$CB_MANAGEMENT_CONTEXT_PATH" \
 -e "CB_UI_ADDR=$CB_UI_ADDR" \
+-e "CB_DEFAULT_USER_EMAIL=$CB_DEFAULT_USER_EMAIL" \
+-e "CB_DEFAULT_USER_PASSWORD=$CB_DEFAULT_USER_PASSWORD" \
+-e "CB_DEFAULT_USER_FIRSTNAME=$CB_DEFAULT_USER_FIRSTNAME" \
+-e "CB_DEFAULT_USER_LASTNAME=$CB_DEFAULT_USER_LASTNAME" \
+-e "CB_DEFAULT_COMPANY_NAME=$CB_DEFAULT_COMPANY_NAME" \
 --link postgresql:cb_db \
--p 8080:8080 \
-sequenceiq/cloudbreak bash
+-p $CB_API_PORT:8080 \
+-p $CB_UI_PORT:80 \
+sequenceiq/cloudbreak:$DOCKER_IMAGE_TAG bash
 
-#pollTimeout=10
-BACKEND_IP=$(docker inspect --format="{{.NetworkSettings.IPAddress}}" $(docker ps -ql))
-echo Backend ip: $BACKEND_IP
+# we are starting the wait_for_cloudbreak_api.sh script in a container
+# so it can use the internal 172.x.x.x ip to check. the two volume
+# is a hack to be able to communicate to docker from inside a docker container.
+# Mainly it makes life with boot2docker on OSX and Windows easier
+docker run -it --rm \
+  -v /usr/local/bin/docker:/usr/local/bin/docker \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  --entrypoint /bin/bash \
+  sequenceiq/cloudbreak:$DOCKER_IMAGE_TAG -c /wait_for_cloudbreak_api.sh
 
+docker run -d --name uluwatu \
+  -e CB_API_URL="$CB_API_URL" \
+  --net=container:cloudbreak \
+  sequenceiq/uluwatu:$DOCKER_IMAGE_TAG
 
-url="http://$BACKEND_IP:8080/health"
-maxAttempts=10
-pollTimeout=30
+command_exists() {
+	command -v "$@" > /dev/null 2>&1
+}
 
-for (( i=1; i<=$maxAttempts; i++ ))
-do
-    echo "GET $url. Attempt #$i"
-    code=`curl -sL -w "%{http_code}\\n" "$url" -o /dev/null`
-    echo "Found code $code"
-    if [ "x$code" = "x200" ]
-    then
-         echo "SequenceIQ Cloudbreak is available!"
-         break
-    elif [ $i -eq $maxAttempts ]
-    then
-         echo "SequenceIQ Cloudbreak not started in time."
-         exit 1
-    fi
-    sleep $pollTimeout
-done
+if command_exists boot2docker; then
+  CLOUDBREAK_IP=$(boot2docker ip 2> /dev/null)
+else
+  CLOUDBREAK_IP=$(docker inspect -f "{{.NetworkSettings.IPAddress}}" cloudbreak)
+fi
 
-# register the user
-echo "Registering the user: $CB_USER"
+cat <<EOF
+=============================
+= Please put this line into =
+= /etc/hosts                =
+=============================
 
-curl -sX POST -H "Content-Type: application/json" "http://${BACKEND_IP}:8080/users" \
-  --data "{\"email\": \""$CB_USER"\", \"password\": \""$CB_PASS"\",  \"firstName\": \"seq\", \"lastName\": \"pwd\", \"company\": \"Testing ltd\" }" | jq '.'
+$CLOUDBREAK_IP  $CB_API_HOST
 
-echo "Please check your emails and confirm your registation."
+EOF
