@@ -30,6 +30,9 @@ source env_props.sh
 
 : ${DOCKER_IMAGE_TAG:=0.1-hotfix}
 
+docker pull sequenceiq/uluwatu:$DOCKER_IMAGE_TAG
+docker pull sequenceiq/cloudbreak:$DOCKER_IMAGE_TAG
+
 source check_env.sh
 
 if [ $? -ne 0 ];
