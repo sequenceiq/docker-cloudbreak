@@ -91,6 +91,8 @@ docker run -it --rm \
   --entrypoint /bin/bash \
   sequenceiq/cloudbreak:$DOCKER_IMAGE_TAG -c /wait_for_cloudbreak_api.sh
 
+docker inspect uluwatu &>/dev/null && docker rm -f uluwatu
+
 docker run -d --name uluwatu \
   -e CB_API_URL="$CB_API_URL" \
   --net=container:cloudbreak \
