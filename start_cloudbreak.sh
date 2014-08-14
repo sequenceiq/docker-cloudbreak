@@ -19,7 +19,7 @@ source env_props.sh
 : ${CB_BLUEPRINT_DEFAULTS:="lambda-architecture,multi-node-hdfs-yarn,single-node-hdfs-yarn"}
 : ${CB_SNS_SSL:="false"}
 : ${CB_DB_ENV_DB:="cloudbreak"}
-: ${CB_HBM2DDL_STRATEGY:="update"}
+: ${CB_HBM2DDL_STRATEGY:="create"}
 : ${CB_API_HOST:=cloudbreak.kom}
 : ${CB_API_PORT:=8080}
 : ${CB_UI_PORT:=80}
@@ -30,13 +30,14 @@ source env_props.sh
 
 : ${DOCKER_IMAGE_TAG:=0.1-hotfix}
 
-docker pull sequenceiq/uluwatu:$DOCKER_IMAGE_TAG
-docker pull sequenceiq/cloudbreak:$DOCKER_IMAGE_TAG
+if [[ "$DOCKER_IMAGE_TAG" != "latest" ]] ; then
+  docker pull sequenceiq/uluwatu:$DOCKER_IMAGE_TAG
+  docker pull sequenceiq/cloudbreak:$DOCKER_IMAGE_TAG
+fi
 
 source check_env.sh
 
-if [ $? -ne 0 ];
-  then
+if [ $? -ne 0 ]; then
   exit 1;
 fi
 
