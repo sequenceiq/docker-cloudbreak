@@ -25,6 +25,16 @@ url="http://$CLOUDBREAK_IP:8080/health"
 maxAttempts=10
 pollTimeout=30
 
+cat <<EOF
+========================================================
+= echo this container waits for cloudbreak availabilty =
+= by checking the health url:
+=   $url
+=
+= maxAttempts=$maxAttempts
+========================================================
+EOF
+
 for (( i=1; i<=$maxAttempts; i++ ))
 do
     echo "GET $url. Attempt #$i"
