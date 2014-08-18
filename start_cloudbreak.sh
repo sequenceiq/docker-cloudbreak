@@ -14,6 +14,23 @@ fi
 # check the environment
 source env_props.sh
 
+check-docker-version() {
+  DOCKER_VER=$(docker version|sed -n "/Server version/ {s/.*:.//; s/\.//gp}")
+  if [ $DOCKER_VER -lt 111 ]; then
+    cat <<EOF
+
+=============================================
+= ERROR                                     =
+= You are using a too old version of Docker =
+= Please upgrade it to at least 1.1.1       =
+=============================================
+EOF
+    exit -1
+  fi
+}
+
+check-docker-version
+
 : ${CB_AZURE_IMAGE_URI:="http://vmdepoteastus.blob.core.windows.net/linux-community-store/community-62091-a59dcdc1-d82d-4e76-9094-27b8c018a4a1-5.vhd"}
 : ${CB_MANAGEMENT_CONTEXT_PATH:="/"}
 : ${CB_BLUEPRINT_DEFAULTS:="lambda-architecture,multi-node-hdfs-yarn,single-node-hdfs-yarn"}
