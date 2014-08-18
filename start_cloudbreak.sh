@@ -58,6 +58,7 @@ if [ $? -ne 0 ]; then
   exit 1;
 fi
 
+# Removes previous containers
 docker inspect postgresql &>/dev/null && docker rm -f postgresql
 
 # Start a postgres database docker container
@@ -72,9 +73,10 @@ timeout=10
 echo "Wait $timeout seconds for the POSTGRES DB to start up"
 sleep $timeout
 
-# Start the CLoudbreak application docker container
+# Removes previous containers
 docker inspect cloudbreak &>/dev/null &&  docker rm -f cloudbreak
 
+# Start the CLoudbreak application docker container
 docker run -d --name="cloudbreak" \
 -e "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" \
 -e "AWS_SECRET_KEY=$AWS_SECRET_KEY" \
@@ -109,6 +111,8 @@ docker run -it --rm \
   --entrypoint /bin/bash \
   sequenceiq/cloudbreak:$DOCKER_IMAGE_TAG -c /wait_for_cloudbreak_api.sh
 
+
+# Removes previous containers
 docker inspect uluwatu &>/dev/null && docker rm -f uluwatu
 
 docker run -d --name uluwatu \
