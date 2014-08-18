@@ -102,12 +102,10 @@ docker run -d --name="cloudbreak" \
 sequenceiq/cloudbreak:$DOCKER_IMAGE_TAG bash
 
 # we are starting the wait_for_cloudbreak_api.sh script in a container
-# so it can use the internal 172.x.x.x ip to check. the two volume
-# is a hack to be able to communicate to docker from inside a docker container.
-# Mainly it makes life with boot2docker on OSX and Windows easier
+# using the same network interface as cloudbreak, so it can check
+# simple on 127.0.0.1 event in a different container
 docker run -it --rm \
-  -v /usr/local/bin/docker:/usr/local/bin/docker \
-  -v /var/run/docker.sock:/var/run/docker.sock \
+  --net=container:cloudbreak \
   --entrypoint /bin/bash \
   sequenceiq/cloudbreak:$DOCKER_IMAGE_TAG -c /wait_for_cloudbreak_api.sh
 
