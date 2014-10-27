@@ -35,11 +35,10 @@ check-docker-version
 : ${CB_MANAGEMENT_CONTEXT_PATH:="/"}
 : ${CB_BLUEPRINT_DEFAULTS:="lambda-architecture,multi-node-hdfs-yarn,single-node-hdfs-yarn"}
 : ${CB_SNS_SSL:="false"}
-: ${CB_DB_ENV_DB:="cloudbreak"}
 : ${CB_HBM2DDL_STRATEGY:="create"}
 : ${CB_API_PORT:=8080}
-: ${CB_DB_ENV_USER:=cloudbreak}
-: ${CB_DB_ENV_PASS:=cloudbreak}
+: ${CB_DB_ENV_USER:=postgres}
+: ${CB_DB_ENV_PASS:=}
 : ${CB_CLIENT_ID:=cloudbreak}
 : ${CB_CLIENT_SECRET:=cloudbreaksecret}
 : ${CB_SMTP_SENDER_PORT=587}
@@ -74,20 +73,18 @@ fi
 docker inspect postgresql &>/dev/null && docker rm -f postgresql
 
 # Start a postgres database docker container
-docker run -d --name="postgresql" \
-  -p 5432:5432 \
-  -e "USER=$CB_DB_ENV_USER" \
-  -e "DB=$CB_DB_ENV_DB" \
-  -e "PASS=$CB_DB_ENV_PASS"  \
-  paintedfox/postgresql
+docker run -d --name="postgresql" -p 5432:5432 postgres
 
 timeout=10
 echo "Wait $timeout seconds for the POSTGRES DB to start up"
 sleep $timeout
 
+docker run -it --link postgresql:postgres --rm postgres sh -c 'exec createdb -h "$POSTGRES_PORT_5432_TCP_ADDR" -p "$POSTGRES_PORT_5432_TCP_PORT" -U postgres cloudbreak'
+docker run -it --link postgresql:postgres --rm postgres sh -c 'exec dropdb -h "$POSTGRES_PORT_5432_TCP_ADDR" -p "$POSTGRES_PORT_5432_TCP_PORT" -U postgres postgres'
+
 docker inspect uaadb &>/dev/null && docker rm -f uaadb
 
-docker run -d --name="uaadb"  -e USER="uaaadmin" -e DB="uaa" -e PASS="uaaadmin" paintedfox/postgresql
+docker run -d --name="uaadb" postgres
 echo "Wait $timeout seconds for the UAA DB to start up"
 sleep $timeout
 
@@ -120,6 +117,8 @@ docker run -d --name="cloudbreak" \
 -e "CB_CLIENT_ID=$CB_CLIENT_ID" \
 -e "CB_CLIENT_SECRET=$CB_CLIENT_SECRET" \
 -e "CB_IDENTITY_SERVER_URL=http://$UAA_ADDR:8080" \
+-e "CB_DB_ENV_USER=$CB_DB_ENV_USER" \
+-e "CB_DB_ENV_PASS=$CB_DB_ENV_PASS" \
 --link postgresql:cb_db \
 -p $CB_API_PORT:8080 \
 sequenceiq/cloudbreak:$CB_DOCKER_IMAGE_TAG bash
