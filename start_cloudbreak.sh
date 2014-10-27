@@ -170,11 +170,15 @@ command_exists() {
 ULUWATU_IP=$(docker inspect -f "{{.NetworkSettings.IPAddress}}" uluwatu)
 
 cat <<EOF
-=============================================
+===========================================================
 Cloudbreak is running on: $CB_ADDR:$CB_API_PORT
 Uluwatu is running on: localhost:3000
         username: admin@sequenceiq.com
         password: seqadmin
 Sultans is running on: $SULTANS_ADDR:$SL_PORT
-=============================================
+
+Note: If you are using boot2docker you should forward the
+      port 3000 to the local machine's port 3000 on the
+      VirtualBox's network adapter
+===========================================================
 EOF
