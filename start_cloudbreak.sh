@@ -44,16 +44,25 @@ check-docker-version
 : ${CB_CLIENT_SECRET:=cloudbreaksecret}
 : ${CB_SMTP_SENDER_PORT=587}
 : ${CB_SMTP_SENDER_FROM=no-reply@sequenceiq.com}
+
 : ${ULU_OAUTH_REDIRECT_URI=http://localhost:3000/authorize}
 : ${ULU_OAUTH_CLIENT_SECRET=uluwatusecret}
 : ${ULU_OAUTH_CLIENT_ID=uluwatu}
-: ${DOCKER_IMAGE_TAG:=latest}
-: ${ULU_DOCKER_IMAGE_TAG:=latest}
 
-if [[ "$DOCKER_IMAGE_TAG" != "latest" ]] ; then
-  docker pull sequenceiq/uluwatu:$DOCKER_IMAGE_TAG
-  docker pull sequenceiq/cloudbreak:$DOCKER_IMAGE_TAG
-fi
+: ${SL_CLIENT_ID=sultans}
+: ${SL_CLIENT_SECRET=sultanssecret}
+: ${SL_PORT=8081}
+: ${SL_ZIP=master}
+
+: ${UAA_DOCKER_IMAGE_TAG:=latest}
+: ${CB_DOCKER_IMAGE_TAG:=latest}
+: ${ULU_DOCKER_IMAGE_TAG:=latest}
+: ${SULTANS_DOCKER_IMAGE_TAG:=latest}
+
+docker pull sequenceiq/uaa:$UAA_DOCKER_IMAGE_TAG
+docker pull sequenceiq/uluwatu:$ULU_DOCKER_IMAGE_TAG
+docker pull sequenceiq/cloudbreak:$CB_DOCKER_IMAGE_TAG
+docker pull sequenceiq/sultans:$SULTANS_DOCKER_IMAGE_TAG
 
 source check_env.sh
 
@@ -84,7 +93,7 @@ sleep $timeout
 
 docker inspect uaa &>/dev/null && docker rm -f uaa
 
-docker run -d --name="uaa" --link uaadb:db sequenceiq/uaa:1.8.1
+docker run -d --name="uaa" --link uaadb:db sequenceiq/uaa:$UAA_DOCKER_IMAGE_TAG
 timeout=20
 echo "Wait $timeout seconds for the UAA to start up"
 sleep $timeout
@@ -113,7 +122,7 @@ docker run -d --name="cloudbreak" \
 -e "CB_IDENTITY_SERVER_URL=http://$UAA_ADDR:8080" \
 --link postgresql:cb_db \
 -p $CB_API_PORT:8080 \
-sequenceiq/cloudbreak:$DOCKER_IMAGE_TAG bash
+sequenceiq/cloudbreak:$CB_DOCKER_IMAGE_TAG bash
 
 # we are starting the wait_for_cloudbreak_api.sh script in a container
 # using the same network interface as cloudbreak, so it can check
@@ -121,12 +130,30 @@ sequenceiq/cloudbreak:$DOCKER_IMAGE_TAG bash
 docker run -it --rm \
   --net=container:cloudbreak \
   --entrypoint /bin/bash \
-  sequenceiq/cloudbreak:$DOCKER_IMAGE_TAG -c /wait_for_cloudbreak_api.sh
+  sequenceiq/cloudbreak:$CB_DOCKER_IMAGE_TAG -c /wait_for_cloudbreak_api.sh
+
+# Removes previous containers
+docker inspect sultans &>/dev/null && docker rm -f sultans
+
+CB_ADDR=$(docker inspect -f "{{.NetworkSettings.IPAddress}}" cloudbreak)
+
+docker run -d --name="sultans" \
+-e "SL_CLIENT_ID=$SL_CLIENT_ID" \
+-e "SL_CLIENT_SECRET=$SL_CLIENT_SECRET" \
+-e "SL_UAA_ADDRESS=http://$UAA_ADDR:8080" \
+-e "SL_SMTP_SENDER_HOST=$CB_SMTP_SENDER_HOST" \
+-e "SL_SMTP_SENDER_PORT=$CB_SMTP_SENDER_PORT" \
+-e "SL_SMTP_SENDER_USERNAME=$CB_SMTP_SENDER_USERNAME" \
+-e "SL_SMTP_SENDER_PASSWORD=$CB_SMTP_SENDER_PASSWORD" \
+-e "SL_SMTP_SENDER_FROM=$CB_SMTP_SENDER_FROM" \
+-e "SL_CB_ADDRESS=http://$CB_ADDR:8080" \
+-e "SL_ZIP=$SL_ZIP" \
+-p $SL_PORT:8080 sequenceiq/sultans:$SULTANS_DOCKER_IMAGE_TAG
 
 # Removes previous containers
 docker inspect uluwatu &>/dev/null && docker rm -f uluwatu
 
-CB_ADDR=$(docker inspect -f "{{.NetworkSettings.IPAddress}}" cloudbreak)
+SULTANS_ADDR=$(docker inspect -f "{{.NetworkSettings.IPAddress}}" sultans)
 
 docker run -d --name="uluwatu" \
 -e "ULU_CLOUDBREAK_ADDRESS=http://$CB_ADDR:8080" \
@@ -134,21 +161,21 @@ docker run -d --name="uluwatu" \
 -e "ULU_OAUTH_CLIENT_ID=$ULU_OAUTH_CLIENT_ID" \
 -e "ULU_OAUTH_CLIENT_SECRET=$ULU_OAUTH_CLIENT_SECRET" \
 -e "ULU_OAUTH_REDIRECT_URI=$ULU_OAUTH_REDIRECT_URI" \
--e "ULU_SULTANS_ADDRESS=http://$UAA_ADDR:8080" \
+-e "ULU_SULTANS_ADDRESS=http://$SULTANS_ADDR:8080" \
 -p 3000:3000 sequenceiq/uluwatu:$ULU_DOCKER_IMAGE_TAG
 
 command_exists() {
 	command -v "$@" > /dev/null 2>&1
 }
 
-CLOUDBREAK_IP=$(docker inspect -f "{{.NetworkSettings.IPAddress}}" cloudbreak)
 ULUWATU_IP=$(docker inspect -f "{{.NetworkSettings.IPAddress}}" uluwatu)
 
 cat <<EOF
 =============================================
-Cloudbreak is running on: $CLOUDBREAK_IP:$CB_API_PORT
+Cloudbreak is running on: $CB_ADDR:$CB_API_PORT
 Uluwatu is running on: localhost:3000
         username: admin@sequenceiq.com
-        password: admin
+        password: seqadmin
+Sultans is running on: $SULTANS_ADDR:$SL_PORT
 =============================================
 EOF
