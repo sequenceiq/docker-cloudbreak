@@ -79,9 +79,6 @@ timeout=10
 echo "Wait $timeout seconds for the POSTGRES DB to start up"
 sleep $timeout
 
-docker run -it --link postgresql:postgres --rm postgres sh -c 'exec createdb -h "$POSTGRES_PORT_5432_TCP_ADDR" -p "$POSTGRES_PORT_5432_TCP_PORT" -U postgres cloudbreak'
-docker run -it --link postgresql:postgres --rm postgres sh -c 'exec dropdb -h "$POSTGRES_PORT_5432_TCP_ADDR" -p "$POSTGRES_PORT_5432_TCP_PORT" -U postgres postgres'
-
 docker inspect uaadb &>/dev/null && docker rm -f uaadb
 
 docker run -d --name="uaadb" postgres
