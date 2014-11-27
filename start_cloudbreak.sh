@@ -152,6 +152,7 @@ docker inspect uluwatu &>/dev/null && docker rm -f uluwatu
 SULTANS_ADDR=$(docker inspect -f "{{.NetworkSettings.IPAddress}}" sultans)
 
 docker run -d --name="uluwatu" \
+-e "ULU_ZIP=v0.1.102" \
 -e "ULU_CLOUDBREAK_ADDRESS=http://$CB_ADDR:8080" \
 -e "ULU_IDENTITY_ADDRESS=http://$UAA_ADDR:8080" \
 -e "ULU_OAUTH_CLIENT_ID=$ULU_OAUTH_CLIENT_ID" \
