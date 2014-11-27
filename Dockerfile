@@ -2,7 +2,7 @@ FROM dockerfile/java
 MAINTAINER SequenceIQ
 
 # install the cloudbreak app
-ADD https://s3-eu-west-1.amazonaws.com/maven.sequenceiq.com/releases/com/sequenceiq/cloudbreak/0.2.59/cloudbreak-0.2.59.jar /cloudbreak.jar
+ADD https://s3-eu-west-1.amazonaws.com/maven.sequenceiq.com/releases/com/sequenceiq/cloudbreak/0.2.64/cloudbreak-0.2.64.jar /cloudbreak.jar
 
 # install the cloudbreak-shell app
 ADD https://s3-eu-west-1.amazonaws.com/maven.sequenceiq.com/releases/com/sequenceiq/cloudbreak-shell/0.2.10/cloudbreak-shell-0.2.10.jar /cloudbreak-shell.jar
