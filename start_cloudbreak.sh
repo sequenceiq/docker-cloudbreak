@@ -44,6 +44,7 @@ check-docker-version
 : ${CB_SMTP_SENDER_PORT=587}
 : ${CB_SMTP_SENDER_FROM=no-reply@sequenceiq.com}
 
+: ${ULU_HOST_ADDRESS=localhost}
 : ${ULU_OAUTH_REDIRECT_URI=http://localhost:3000/authorize}
 : ${ULU_OAUTH_CLIENT_SECRET=uluwatusecret}
 : ${ULU_OAUTH_CLIENT_ID=uluwatu}
@@ -159,6 +160,7 @@ docker run -d --name="uluwatu" \
 -e "ULU_OAUTH_CLIENT_SECRET=$ULU_OAUTH_CLIENT_SECRET" \
 -e "ULU_OAUTH_REDIRECT_URI=$ULU_OAUTH_REDIRECT_URI" \
 -e "ULU_SULTANS_ADDRESS=http://$SULTANS_ADDR:8080" \
+-e "ULU_HOST_ADDRESS=http://$ULU_HOST_ADDRESS:3000" \
 -p 3000:3000 sequenceiq/uluwatu:$ULU_DOCKER_IMAGE_TAG
 
 command_exists() {
