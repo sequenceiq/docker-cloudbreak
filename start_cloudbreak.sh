@@ -32,8 +32,8 @@ EOF
 check-docker-version
 
 : ${CB_AZURE_IMAGE_URI:="http://vmdepotneurope.blob.core.windows.net/linux-community-store/community-62091-c0713e8c-bc6d-44cc-a751-bf9c35603340-5.vhd"}
-: ${CB_MANAGEMENT_CONTEXT_PATH:="/"}
-: ${CB_BLUEPRINT_DEFAULTS:="lambda-architecture,multi-node-hdfs-yarn,single-node-hdfs-yarn"}
+: ${CB_GCP_SOURCE_IMAGE_PATH:="sequenceiqimage/sequenceiq-ambari17-consul.image.tar.gz"}
+: ${CB_BLUEPRINT_DEFAULTS:="lambda-architecture,multi-node-hdfs-yarn,hdp-multinode-default"}
 : ${CB_SNS_SSL:="false"}
 : ${CB_HBM2DDL_STRATEGY:="create"}
 : ${CB_API_PORT:=8080}
@@ -44,10 +44,10 @@ check-docker-version
 : ${CB_SMTP_SENDER_PORT=587}
 : ${CB_SMTP_SENDER_FROM=no-reply@sequenceiq.com}
 
-: ${ULU_HOST_ADDRESS=localhost}
-: ${ULU_OAUTH_REDIRECT_URI=http://localhost:3000/authorize}
+: ${ULU_HOST_ADDRESS=http://localhost:3000}
 : ${ULU_OAUTH_CLIENT_SECRET=uluwatusecret}
 : ${ULU_OAUTH_CLIENT_ID=uluwatu}
+: ${ULU_PERISCOPE_ADDRESS=http://localhost:8082}
 
 : ${SL_CLIENT_ID=sultans}
 : ${SL_CLIENT_SECRET=sultanssecret}
@@ -109,9 +109,9 @@ docker run -d --name="cloudbreak" \
 -e "CB_SMTP_SENDER_PORT=$CB_SMTP_SENDER_PORT" \
 -e "CB_SMTP_SENDER_FROM=$CB_SMTP_SENDER_FROM" \
 -e "CB_AZURE_IMAGE_URI=$CB_AZURE_IMAGE_URI" \
+-e "CB_GCP_SOURCE_IMAGE_PATH=$CB_GCP_SOURCE_IMAGE_PATH" \
 -e "CB_BLUEPRINT_DEFAULTS=$CB_BLUEPRINT_DEFAULTS" \
 -e "CB_SNS_SSL=$CB_SNS_SSL" \
--e "CB_MANAGEMENT_CONTEXT_PATH=$CB_MANAGEMENT_CONTEXT_PATH" \
 -e "CB_CLIENT_ID=$CB_CLIENT_ID" \
 -e "CB_CLIENT_SECRET=$CB_CLIENT_SECRET" \
 -e "CB_IDENTITY_SERVER_URL=http://$UAA_ADDR:8080" \
@@ -153,14 +153,14 @@ docker inspect uluwatu &>/dev/null && docker rm -f uluwatu
 SULTANS_ADDR=$(docker inspect -f "{{.NetworkSettings.IPAddress}}" sultans)
 
 docker run -d --name="uluwatu" \
--e "ULU_ZIP=v0.1.102" \
+-e "ULU_ZIP=v0.1.213" \
 -e "ULU_CLOUDBREAK_ADDRESS=http://$CB_ADDR:8080" \
 -e "ULU_IDENTITY_ADDRESS=http://$UAA_ADDR:8080" \
 -e "ULU_OAUTH_CLIENT_ID=$ULU_OAUTH_CLIENT_ID" \
 -e "ULU_OAUTH_CLIENT_SECRET=$ULU_OAUTH_CLIENT_SECRET" \
--e "ULU_OAUTH_REDIRECT_URI=$ULU_OAUTH_REDIRECT_URI" \
+-e "ULU_HOST_ADDRESS=$ULU_HOST_ADDRESS" \
 -e "ULU_SULTANS_ADDRESS=http://$SULTANS_ADDR:8080" \
--e "ULU_HOST_ADDRESS=http://$ULU_HOST_ADDRESS:3000" \
+-e "ULU_PERISCOPE_ADDRESS=$ULU_PERISCOPE_ADDRESS" \
 -p 3000:3000 sequenceiq/uluwatu:$ULU_DOCKER_IMAGE_TAG
 
 command_exists() {
