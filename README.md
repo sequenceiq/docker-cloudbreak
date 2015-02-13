@@ -1,3 +1,5 @@
+_Note: Currently this repository is under heavy refactoring - we are not fixing issues in the current codebase anymore. All the issues will be addressed in the new code._
+
 This repo contains the source of the Cloudbreak Docker image.
 To have a working API/UI, you need several containers. There is a
 `start_cloudbreak.sh` script which starts them in this order:
