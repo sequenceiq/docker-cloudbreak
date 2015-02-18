@@ -1,18 +1,13 @@
 FROM dockerfile/java
 MAINTAINER SequenceIQ
 
+ENV VERSION 0.3.61
 # install the cloudbreak app
-ADD https://s3-eu-west-1.amazonaws.com/maven.sequenceiq.com/releases/com/sequenceiq/cloudbreak/0.3.18/cloudbreak-0.3.18.jar /cloudbreak.jar
-
-# install the cloudbreak-shell app
-ADD https://s3-eu-west-1.amazonaws.com/maven.sequenceiq.com/releases/com/sequenceiq/cloudbreak-shell/0.2.25/cloudbreak-shell-0.2.25.jar /cloudbreak-shell.jar
+ADD https://s3-eu-west-1.amazonaws.com/maven.sequenceiq.com/releases/com/sequenceiq/cloudbreak/$VERSION/cloudbreak-$VERSION.jar /cloudbreak.jar
 
 # Install starter script for the Cloudbreak application
 ADD add/start_cloudbreak_app.sh /
 ADD add/wait_for_cloudbreak_api.sh /
-
-# Install starter script for the cloudbreak shell application
-ADD add/start_cloudbreak_shell_app.sh /
 
 # add ngrok
 ADD add/ngrok.zip /ngrok.zip
