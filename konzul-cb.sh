@@ -66,7 +66,6 @@ start_cloudbreak_db() {
     docker run -d -P \
       --name=postgresql \
       -e "SERVICE_NAME=cbdb" \
-      -e "SERVICE_TAGS=master,backups" \
       -v /var/lib/cloudbreak/cbdb:/var/lib/postgresql/data \
       postgres:9.4.0
 
