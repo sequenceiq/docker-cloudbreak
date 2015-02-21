@@ -37,6 +37,9 @@ dhp(){
 }
 
 start_consul() {
+    declare desc="starts consul binding to: $BRIDGE_IP http:8500 dns:53 rpc:8400"
+
+    debug $desc
     docker run -d \
         -h node1 \
         --name=consul \
@@ -47,6 +50,9 @@ start_consul() {
 }
 
 start_registrator() {
+    declare desc="starts registrator connecting to consul"
+
+    debug $desc
     docker run -d \
       --name=registrator \
       -v /var/run/docker.sock:/tmp/docker.sock \
@@ -54,6 +60,9 @@ start_registrator() {
 }
 
 start_cloudbreak_db() {
+    declare desc="starts postgress container for cloudbreak backend"
+
+    debug $desc
     docker run -d -P \
       --name=postgresql \
       -e "SERVICE_NAME=cbdb" \
@@ -73,6 +82,9 @@ start_cloudbreak_db() {
 }
 
 start_uaa() {
+    declare desc="starts the uaa based OAuth identity server with psql backend"
+
+    debug $desc
     docker run -d -P \
       --name="uaadb" \
       -v /var/lib/cloudbreak/uaadb:/var/lib/postgresql/data \
@@ -86,6 +98,9 @@ start_uaa() {
 }
 
 start_cloudbreak_shell() {
+    declare desc="starts cloudbreak shell"
+
+    debug $desc
     docker run -it \
         -e SEQUENCEIQ_USER=admin@sequenceiq.com\
         -e SEQUENCEIQ_PASSWORD=seqadmin \
@@ -104,6 +119,9 @@ cb_envs_to_docker_options() {
 }
 
 start_cloudbreak() {
+    declare desc="starts cloudbreak component"
+
+    debug $des
     cb_envs_to_docker_options
   
     set -x
