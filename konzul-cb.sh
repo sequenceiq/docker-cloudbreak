@@ -142,7 +142,8 @@ start_cloudbreak() {
         -e CB_DB_PORT_5432_TCP_PORT=$(dp cbdb) \
         $DOCKER_CB_ENVS \
         -p 8080 \
-        sequenceiq/cloudbreak:$CB_DOCKER_IMAGE_TAG bash
+        sequenceiq/cloudbreak:0.3.65 bash
+    set +x
 }
 
 start_uluwatu() {
