@@ -130,7 +130,7 @@ cb_envs_to_docker_options() {
 start_cloudbreak() {
     declare desc="starts cloudbreak component"
 
-    debug $des
+    debug $desc
     cb_envs_to_docker_options
   
     docker run -d \
