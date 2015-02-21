@@ -90,3 +90,16 @@ Cloudbreak shell in a docker container by running the script:
 ```
 ./start_cli.sh
 ```
+## Utility functions
+
+### serv
+queries consul ervices on the http interface:
+- without any arg it displays all registered services
+- if you specify a service name (uaa/cloudbreak/uluwatu/...) it displays the relevant service details
+
+### dig
+
+using consul’s DNS interface with the built-in dig utility is wrapped in3 functions:
+- dh: dig host of a service
+- dp: dig port of a service
+- dhp: query in a combined form HOST:PORT
