@@ -32,6 +32,7 @@ dp() {
   dig @${BRIDGE_IP} +short $1.service.consul SRV | cut -d" " -f 3
 }
 
+# dig host:port
 dhp(){
     echo $(dh $1):$(dp $1)
 }
