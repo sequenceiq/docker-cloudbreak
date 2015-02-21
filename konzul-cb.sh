@@ -87,6 +87,7 @@ start_uaa() {
     debug $desc
     docker run -d -P \
       --name="uaadb" \
+      -e "SERVICE_NAME=uaadb" \
       -v /var/lib/cloudbreak/uaadb:/var/lib/postgresql/data \
       postgres:9.4.0
     
