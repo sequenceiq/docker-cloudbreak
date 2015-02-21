@@ -76,11 +76,11 @@ start_cloudbreak_db() {
     #sleep 10
     
     #docker run -it --rm \
-    #  --link postgresql:postgres \
+    #  --link cbdb:postgres \
     #  postgres:9.4.0 sh -c 'exec createdb -h "$POSTGRES_PORT_5432_TCP_ADDR" -p "$POSTGRES_PORT_5432_TCP_PORT" -U postgres cloudbreak'
 
     #docker run -it --rm \
-    #  --link postgresql:postgres \
+    #  --link cbdb:postgres \
     #  postgres:9.4.0 sh -c 'exec dropdb -h "$POSTGRES_PORT_5432_TCP_ADDR" -p "$POSTGRES_PORT_5432_TCP_PORT" -U postgres postgres'
 }
 
