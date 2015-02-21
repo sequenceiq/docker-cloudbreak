@@ -92,7 +92,7 @@ start_uaa() {
       postgres:9.4.0
     
     debug "waits for uaadb get registered in consul"
-    sleep 5
+    sleep 10
     debug "uaa db: $(dhp uaadb) "
 
     #  -v /usr/local/cloudbreak/uaa.yml:/uaa/uaa.yml \
