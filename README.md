@@ -39,6 +39,48 @@ docker logs -f uaa
 docker logs -f uluwatu
 docker logs -f sultans
 ```
+## Service discovery
+
+Cloudbreak components uaa/cloudbreak/uluwatu/sultans/psql should know about each others addresses. Previously
+it was managed by [docker links](https://docs.docker.com/userguide/dockerlinks/). It has the limitation of working
+only on a single host. We aim for having an identical infrastructure at all environments, So we have moved to
+a solution based on [consul](https://www.consul.io) and [registrator](https://github.com/gliderlabs/registrator).
+
+### Consul
+
+[Consul]((https://www.consul.io) ) is a multi datacenter aware service discovery and configuration tool, with 
+built-in health checking. It offers a usual [json REST api over http](https://www.consul.io/docs/agent/http.html), 
+and the service discovery related functionalty is also available on [DNS protocol](https://www.consul.io/docs/agent/dns.html)
+
+The dns interface makes it really easy to get IP and PORT of a registered service:
+
+```
+dig @${BRIDGE_IP} +short uaa.service.consul SRV
+```
+
+### Bridge IP
+
+Consul needs an IP to bind, and listen on ports:
+- http: 8500 used for consul full rest api (catalog/keyvalue/acl/status/internal)
+- dns: 53 used for providing DNS entries for example for MYSERVICE.service.consul
+- rpc: 8400 used for consul cli with `--rpc-addr` parameter
+
+In docker environments its advised to use the IP address of the
+[docker bridge](https://docs.docker.com/articles/networking/) that way you are able
+to reach consul on linux/osx/windows.
+
+An environment independent way to get the bridge ip:
+```
+BRIDGE_IP=$(docker run --rm gliderlabs/alpine:3.1 ip ro | grep default | cut -d" " -f 3)
+```
+It starts a temp docker container and checks the default routing.
+
+### Registrator
+
+Jeff Lindsay’s [Registrator](https://github.com/gliderlabs/registrator) is defined as:
+
+> Registrator automatically register/deregisters services for Docker containers based 
+> on published ports and metadata from the container environment.
 
 ## Using Cloudbreak CLI
 
