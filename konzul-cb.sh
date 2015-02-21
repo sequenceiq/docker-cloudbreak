@@ -63,22 +63,25 @@ start_registrator() {
 start_cloudbreak_db() {
     declare desc="starts postgress container for cloudbreak backend"
 
+    #local volumeOptions="-v /var/lib/cloudbreak/cbdb:/var/lib/postgresql/data"
+    
     debug $desc
     docker run -d -P \
-      --name=postgresql \
+      --name=cbdb \
       -e "SERVICE_NAME=cbdb" \
-      -v /var/lib/cloudbreak/cbdb:/var/lib/postgresql/data \
+      $volumeOptions \
       postgres:9.4.0
 
-    sleep 10
+    #debug "give 10 sec "
+    #sleep 10
     
-    docker run -it --rm \
-      --link postgresql:postgres \
-      postgres:9.4.0 sh -c 'exec createdb -h "$POSTGRES_PORT_5432_TCP_ADDR" -p "$POSTGRES_PORT_5432_TCP_PORT" -U postgres cloudbreak'
+    #docker run -it --rm \
+    #  --link postgresql:postgres \
+    #  postgres:9.4.0 sh -c 'exec createdb -h "$POSTGRES_PORT_5432_TCP_ADDR" -p "$POSTGRES_PORT_5432_TCP_PORT" -U postgres cloudbreak'
 
-    docker run -it --rm \
-      --link postgresql:postgres \
-      postgres:9.4.0 sh -c 'exec dropdb -h "$POSTGRES_PORT_5432_TCP_ADDR" -p "$POSTGRES_PORT_5432_TCP_PORT" -U postgres postgres'
+    #docker run -it --rm \
+    #  --link postgresql:postgres \
+    #  postgres:9.4.0 sh -c 'exec dropdb -h "$POSTGRES_PORT_5432_TCP_ADDR" -p "$POSTGRES_PORT_5432_TCP_PORT" -U postgres postgres'
 }
 
 start_uaa() {
@@ -130,17 +133,16 @@ start_cloudbreak() {
     debug $des
     cb_envs_to_docker_options
   
-    set -x
     docker run -d \
         --name=cloudbreak \
         -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
         -e AWS_SECRET_KEY=$AWS_SECRET_KEY \
         -e CB_IDENTITY_SERVER_URL=http://$(dhp uaa) \
+        -e CB_DB_PORT_5432_TCP_ADDR=$(dh cbdb) \
+        -e CB_DB_PORT_5432_TCP_PORT=$(dp cbdb) \
         $DOCKER_CB_ENVS \
-        --link postgresql:cb_db \
         -p 8080 \
         sequenceiq/cloudbreak:$CB_DOCKER_IMAGE_TAG bash
-    set +x
 }
 
 start_uluwatu() {
