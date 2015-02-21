@@ -153,15 +153,15 @@ start_uluwatu() {
     -e ULU_NEW_RELIC_APP=uluwatuprod \
     -e ULU_CLOUDBREAK_ADDRESS=http://$(dhp cloudbreak) \
     -e ULU_OAUTH_REDIRECT_URI=http://104.154.86.68:3000/authorize \
-    -e ULU_IDENTITY_ADDRESS=http://104.154.86.68:49162/ \
-    -e ULU_SULTANS_ADDRESS=http://104.154.86.68:49162/  \
+    -e ULU_IDENTITY_ADDRESS=http://$(dhp uaa)/ \
+    -e ULU_SULTANS_ADDRESS=http://$(dhp uaa)/ \
     -e ULU_OAUTH_CLIENT_ID=uluwatu-dev \
     -e ULU_OAUTH_CLIENT_SECRET=f2b9f54c-e8e4-4da7-b5ce-276db040ed6c \
-    -e ULU_HOST_ADDRESS=http://104.154.86.68:3000 \
+    -e ULU_HOST_ADDRESS=http://$BRIDGE_IP:3000 \
     -e ULU_ZIP=v0.1.398 \
     -e NODE_TLS_REJECT_UNAUTHORIZED=0 \
     -e ULU_PERISCOPE_ADDRESS=http://akjshdakjhdakd.kom:8080 \
-    -p 3000:3000 sequenceiq/uluwatu
+    -p $BRIDGE_IP:3000:3000 sequenceiq/uluwatu
 }
 
 token() {
