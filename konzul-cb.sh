@@ -91,10 +91,15 @@ start_uaa() {
       -v /var/lib/cloudbreak/uaadb:/var/lib/postgresql/data \
       postgres:9.4.0
     
+    debug "waits for uaadb get registered in consul"
+    sleep 5
+    debug "uaa db: $(dhp uaadb) "
+
+    #  -v /usr/local/cloudbreak/uaa.yml:/uaa/uaa.yml \
     docker run -d -P \
       --name="uaa" \
-      --link uaadb:db \
-      -v /usr/local/cloudbreak/uaa.yml:/uaa/uaa.yml \
+      -e IDENTITY_DB_URL=$(dhp uaadb) \
+      -v $PWD/uaa.yml:/uaa/uaa.yml \
       sequenceiq/uaa:1.8.1-v1
 }
 
