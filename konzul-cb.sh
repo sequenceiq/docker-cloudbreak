@@ -60,6 +60,19 @@ start_registrator() {
       gliderlabs/registrator:v5 consul://${BRIDGE_IP}:8500
 }
 
+wait_for_service() {
+    declare desc="waits for a service entry to appear in consul"
+    declare service=$1
+    : ${service:? required}
+
+    ( docker run -it --rm \
+        --net container:consul \
+        --entrypoint /bin/consul \
+        sequenceiq/consul:v0.5.0 \
+          watch -type=service -service=$service bash -c 'cat|grep "\[\]" '
+    ) &> /dev/null
+}
+
 start_cloudbreak_db() {
     declare desc="starts postgress container for cloudbreak backend"
 
