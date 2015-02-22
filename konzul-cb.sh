@@ -135,6 +135,7 @@ start_cloudbreak() {
   
     docker run -d \
         --name=cloudbreak \
+        -e "SERVICE_NAME=cloudbreak" \
         -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
         -e AWS_SECRET_KEY=$AWS_SECRET_KEY \
         -e CB_IDENTITY_SERVER_URL=http://$(dhp uaa) \
@@ -148,6 +149,7 @@ start_cloudbreak() {
 
 start_uluwatu() {
     docker run -d --name uluwatu \
+    -e "SERVICE_NAME=uluwatu" \
     -e ULU_PRODUCTION=true \
     -e ULU_NEW_RELIC_KEY=f41e039f20ed06106eecbe9017c85d86969cb57e \
     -e ULU_NEW_RELIC_APP=uluwatuprod \
