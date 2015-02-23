@@ -109,7 +109,7 @@ start_uaa() {
       postgres:9.4.0
     
     debug "waits for uaadb get registered in consul"
-    sleep 10
+    wait_for_service uaadb
     debug "uaa db: $(dhp uaadb) "
 
     #  -v /usr/local/cloudbreak/uaa.yml:/uaa/uaa.yml \
@@ -145,6 +145,9 @@ start_cloudbreak() {
     declare desc="starts cloudbreak component"
 
     debug $desc
+    
+    wait_for_service cbdb
+    debug "cloudbreak db: $(dhp cbdb)"
     cb_envs_to_docker_options
   
     docker run -d \
