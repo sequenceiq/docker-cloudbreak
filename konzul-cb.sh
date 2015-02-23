@@ -47,6 +47,7 @@ start_consul() {
         -p ${BRIDGE_IP}:53:53/udp \
         -p ${BRIDGE_IP}:8400:8400 \
         -p ${BRIDGE_IP}:8500:8500 \
+        -v /var/run/docker.sock:/var/run/docker.sock \
         sequenceiq/consul:v0.5.0 -server -bootstrap -advertise ${BRIDGE_IP}
 }
 
