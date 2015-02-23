@@ -1,0 +1,64 @@
+spring_profiles: postgresql
+
+database:
+  driverClassName: org.postgresql.Driver
+  url: jdbc:postgresql://${IDENTITY_DB_URL}/postgres
+  username: ${IDENTITY_DB_USER:postgres}
+  password: ${IDENTITY_DB_PASS:}
+
+oauth:
+  client:
+    override: true
+    autoapprove:
+      - cloudbreak_shell
+      - periscope-client
+  clients:
+    sultans:
+      id: sultans
+      secret: 855F78BF-188F-45D1-96DA-A55CE0DAF85B
+      authorized-grant-types: client_credentials
+      scope: scim.read,scim.write,password.write
+      authorities: uaa.resource,scim.read,scim.write,password.write
+    uluwatu:
+      id: uluwatu
+      secret: 1AABF87E-EA02-414D-A7C3-72B66D1D8392
+      authorized-grant-types: authorization_code,client_credentials
+      scope: cloudbreak.blueprints,cloudbreak.credentials,cloudbreak.stacks,cloudbreak.templates,openid,password.write,cloudbreak.usages.global,cloudbreak.usages.account,cloudbreak.usages.user,cloudbreak.events,periscope.cluster,cloudbreak.recipes
+      authorities: cloudbreak.subscribe
+      redirect-uri: HOST_ADDRESS:3000/authorize
+    cloudbreak:
+      id: cloudbreak
+      secret: cloudbreaksecret
+      authorized-grant-types: client_credentials
+      scope: scim.read,scim.write,password.write
+      authorities: uaa.resource,scim.read,scim.write,password.write
+    periscope:
+      id: periscope
+      secret: C86B319D-2ED6-48C7-BDA0-D1E47636F9B6
+      authorized-grant-types: client_credentials
+      scope: none
+      authorities: cloudbreak.autoscale,uaa.resource,scim.read
+    periscope-client:
+      id: periscope-client
+      authorized-grant-types: implicit
+      scope: cloudbreak.stacks,openid,periscope.cluster
+      authorities: uaa.none
+      redirect-uri: http://periscope.client
+    cloudbreak_shell:
+      id: cloudbreak_shell
+      authorized-grant-types: implicit
+      scope: cloudbreak.templates,cloudbreak.blueprints,cloudbreak.credentials,cloudbreak.stacks,cloudbreak.events,cloudbreak.usages.global,cloudbreak.usages.account,cloudbreak.usages.user,cloudbreak.recipes,openid,password.write
+      authorities: uaa.none
+      redirect-uri: http://cloudbreak.shell
+    cloudbreak-dev:
+      id: cloudbreak-dev
+      secret: 911C3F49-C6DE-446D-A427-AE2A9C076809
+      authorized-grant-types: client_credentials
+      scope: scim.read,scim.write,password.write
+      authorities: uaa.resource,scim.read,scim.write,password.write
+
+scim:
+  username_pattern: '[a-z0-9+\-_.@]+'
+  users:
+    - admin@sequenceiq.com|seqadmin|admin@sequenceiq.com|Default|User|openid,cloudbreak.templates,cloudbreak.blueprints,cloudbreak.credentials,cloudbreak.stacks,sequenceiq.cloudbreak.admin,sequenceiq.cloudbreak.user,sequenceiq.account.seq1234567.SequenceIQ,cloudbreak.events,cloudbreak.usages.global,cloudbreak.usages.account,cloudbreak.usages.user,periscope.cluster,cloudbreak.recipes
+    - paul@sequenceiq.com|paul|paul@sequenceiq.com|Paul|Smith|openid,cloudbreak.templates,cloudbreak.blueprints,cloudbreak.credentials,cloudbreak.stacks,sequenceiq.cloudbreak.user,sequenceiq.account.abcd1234.SequenceIQ
