@@ -158,7 +158,6 @@ start_cloudbreak() {
         $DOCKER_CB_ENVS \
         -p 8080 \
         sequenceiq/cloudbreak:0.3.65 bash
-    set +x
 }
 
 start_uluwatu() {
