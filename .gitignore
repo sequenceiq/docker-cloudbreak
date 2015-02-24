@@ -1,1 +1,3 @@
 env_props.sh
+uaa.yml
+*.tfstate
