@@ -1,7 +1,7 @@
 FROM dockerfile/java
 MAINTAINER SequenceIQ
 
-ENV VERSION 0.3.65
+ENV VERSION 0.4.8
 # install the cloudbreak app
 ADD https://s3-eu-west-1.amazonaws.com/maven.sequenceiq.com/releases/com/sequenceiq/cloudbreak/$VERSION/cloudbreak-$VERSION.jar /cloudbreak.jar
 
