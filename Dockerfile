@@ -1,7 +1,7 @@
-FROM dockerfile/java
+FROM java
 MAINTAINER SequenceIQ
 
-ENV VERSION 0.4.14
+ENV VERSION 0.5.18
 # install the cloudbreak app
 ADD https://s3-eu-west-1.amazonaws.com/maven.sequenceiq.com/releases/com/sequenceiq/cloudbreak/$VERSION/cloudbreak-$VERSION.jar /cloudbreak.jar
 
@@ -16,7 +16,10 @@ ADD add/ngrok.zip /ngrok.zip
 RUN apt-get update
 RUN apt-get install zip
 
-RUN sudo unzip /ngrok -d /bin
+RUN unzip /ngrok -d /bin
+
+# extract schema files
+RUN unzip cloudbreak.jar schema/* -d /
 
 WORKDIR /
 
