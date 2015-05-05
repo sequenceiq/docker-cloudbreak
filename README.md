@@ -16,7 +16,8 @@ docker build --rm -t sequenceiq/cloudbreak:0.5.20 .
 
 ## Building custom version
 ```
-docker build --rm -t sequenceiq/cloudbreak:0.5.20 .
+sed 's/ENV VERSION.*/ENV VERSION 0.5.22/' Dockerfile > Dockerfile.custom
+docker build -f Dockerfile.custom --rm -t  sequenceiq/cloudbreak:custom-0.5.22 .
 ```
 
 ## Running the image
