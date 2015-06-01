@@ -1,4 +1,11 @@
 #!/bin/bash
 
+: ${SECURE_RANDOM:=true}
+
 echo "Starting the Cloudbreak application..."
-java -jar /cloudbreak.jar
+
+if [ "$SECURE_RANDOM" == "false" ]; then
+  CB_PARAMS=-Djava.security.egd=file:/dev/urandom
+fi
+
+java $CB_PARAMS -jar /cloudbreak.jar
