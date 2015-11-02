@@ -1,3 +1,6 @@
+: ${DOCKERHUB_USERNAME:?"required!"}
+: ${DOCKERHUB_PASSWORD:?"required!"}
+
 install_deps() {
   if ! dockerhub-tag --version &>/dev/null ;then
     echo "---> installing dockerhub-tag binary to /usr/local/bin" 1>&2
