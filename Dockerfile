@@ -9,7 +9,7 @@ ADD bootstrap/wait_for_cloudbreak_api.sh /
 RUN apt-get update
 RUN apt-get install zip
 
-ENV VERSION 1.1.0-rc.36
+ENV VERSION 1.1.0-rc.37
 # install the cloudbreak app
 ADD https://s3-eu-west-1.amazonaws.com/maven.sequenceiq.com/releases/com/sequenceiq/cloudbreak/$VERSION/cloudbreak-$VERSION.jar /cloudbreak.jar
 
