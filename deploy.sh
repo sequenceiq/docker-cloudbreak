@@ -16,15 +16,14 @@ debug() {
 install_deps() {
   if ! dockerhub-tag --version &>/dev/null ;then
     debug "installing dockerhub-tag binary to /usr/local/bin"
-    curl -L https://github.com/progrium/dockerhub-tag/releases/download/v0.2.0/dockerhub-tag_0.2.0_Darwin_x86_64.tgz | tar -xz -C /usr/local/bin/
+    curl -L https://github.com/progrium/dockerhub-tag/releases/download/v0.2.0/dockerhub-tag_0.2.0_$(uname)_x86_64.tgz | tar -xz -C /usr/local/bin/
   else
     debug "dockerhub-tag already installed"
 fi
 }
 
 get_latest_maven_version() {
-  curl -sL  maven.sequenceiq.com/releases/com/sequenceiq/cloudbreak/maven-metadata.xml \
-      |sed -n '/<version>/ h; $ {x;s/ *<.\?version>//gp;}'
+  curl -sL ${MAVEN_METADATA_URL} | sed -n '/<version>/ h; $ {x;s/ *<.\?version>//gp;}'
 }
 
 new_version() {
@@ -39,10 +38,12 @@ new_version() {
   git tag ${NEW_VERSION}
   git push origin master --tags
   
-  dockerhub-tag set sequenceiq/cloudbreak $NEW_VERSION $NEW_VERSION /
+  dockerhub-tag set ${DOCKER_IMAGE} $NEW_VERSION $NEW_VERSION /
 }
 
 main() {
+  : ${MAVEN_METADATA_URL:?"required!"}
+  : ${DOCKER_IMAGE:?"required!"}
   : ${DOCKERHUB_USERNAME:?"required!"}
   : ${DOCKERHUB_PASSWORD:?"required!"}
   : ${DEBUG:=1}
