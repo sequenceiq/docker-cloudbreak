@@ -19,8 +19,9 @@ fi
 
 echo "Starting the Cloudbreak application..."
 
+set -x
 if [ "$SECURE_RANDOM" == "false" ]; then
-  CB_PARAMS=-Djava.security.egd=file:/dev/./urandom
+  CB_JAVA_OPTS="$CB_JAVA_OPTS -Djava.security.egd=file:/dev/./urandom"
 fi
 
-java $CB_PARAMS -jar /cloudbreak.jar
+java $CB_JAVA_OPTS -jar /cloudbreak.jar
