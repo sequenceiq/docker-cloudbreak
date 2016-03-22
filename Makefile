@@ -2,4 +2,4 @@ export MAVEN_METADATA_URL = maven.sequenceiq.com/releases/com/sequenceiq/cloudbr
 export DOCKER_IMAGE = sequenceiq/cloudbreak
 
 dockerhub:
-	./deploy.sh
+	./deploy.sh $(VERSION)
