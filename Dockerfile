@@ -12,7 +12,7 @@ RUN apt-get install -y openjdk-7-jdk zip git
 RUN cd /root && git clone https://github.com/sequenceiq/cloudbreak.git
 RUN cd /root/cloudbreak && git checkout aws-key && ./gradlew clean build
 
-RUN cp /root/cloudbreak/core/build/libs/cloudbreak-*.jar /cloudbreak.jar
+RUN cp /root/cloudbreak/core/build/libs/cloudbreak*.jar /cloudbreak.jar
 
 ENV VERSION 0.5.49
 # install the cloudbreak app
