@@ -10,7 +10,7 @@ RUN apt-get update
 RUN apt-get install -y openjdk-7-jdk zip git
 
 RUN cd /root && git clone https://github.com/sequenceiq/cloudbreak.git
-RUN cd /root/cloudbreak && git checkout br_ci && ./gradlew clean build
+RUN cd /root/cloudbreak && git checkout aws-key && ./gradlew clean build
 
 RUN cp /root/cloudbreak/core/build/libs/cloudbreak-*.jar /cloudbreak.jar
 
