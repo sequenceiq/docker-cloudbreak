@@ -1,4 +1,4 @@
-FROM java:openjdk-7u79-jre
+FROM java:openjdk-8
 MAINTAINER SequenceIQ
 
 # Install starter script for the Cloudbreak application
