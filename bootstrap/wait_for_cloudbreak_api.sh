@@ -12,7 +12,7 @@ docker run -it --rm \
 USAGE
 
 
-url="http://127.0.0.1:8080/health"
+url="http://127.0.0.1:8080/cb/health"
 maxAttempts=10
 pollTimeout=30
 
